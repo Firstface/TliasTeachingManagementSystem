@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface DeptService {
     List<Dept> getDeptByTimeDesc();
+    Dept deleteDeptById(int id);
+    Dept saveDept(Dept dept);
+    Dept updateDept(int Id,Dept dept);
 }

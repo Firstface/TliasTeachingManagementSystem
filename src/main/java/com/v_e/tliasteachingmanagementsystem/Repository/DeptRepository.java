@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface DeptRepository extends JpaRepository<Dept,Integer> {
     List<Dept> findAllByOrderByUpdatedAtDesc();
+    Dept deleteDeptById(int id);
+    Dept findDeptById(int id);
+
 }
