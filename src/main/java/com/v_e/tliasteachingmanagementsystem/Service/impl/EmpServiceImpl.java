@@ -18,6 +18,7 @@ public class EmpServiceImpl implements EmpService {
 
     private final EmpRepository empRepository;
     private final Logger logger = LoggerFactory.getLogger(EmpServiceImpl.class);
+    private final static int OFFSET = 10;
 
     public EmpServiceImpl(EmpRepository empRepository) {
         this.empRepository = empRepository;
@@ -105,16 +106,11 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public List<Emp> getEmpByNameContaining(String name) {
+    public List<Emp> getEmpByNameContaining(String name,int Index) {
         try {
-            List<Emp> existingEmp = empRepository.findEmpByEmpNameContaining(name);
-            if (existingEmp == null) {
-                logger.warn("Emp not found");
-                return null;
-            } else {
-                logger.info("Successfully get data");
-                return existingEmp;
-            }
+            List<Emp> existingEmp = empRepository.findEmpByEmpNameContaining(name).stream().skip((long) Index *OFFSET).limit(10).toList();
+            logger.info("Successfully get data");
+            return existingEmp;
         } catch (DataAccessException e) {
         return null;
         } catch (Exception e) {
@@ -124,16 +120,11 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public List<Emp> getEmpByGender(String gender) {
+    public List<Emp> getEmpByGender(String gender,int Index) {
         try {
-            List<Emp> existingEmp = empRepository.findEmpByGender(gender);
-            if (existingEmp == null) {
-                logger.warn("Emp not found");
-                return null;
-            } else {
-                logger.info("Successfully get data");
-                return existingEmp;
-            }
+            List<Emp> existingEmp = empRepository.findEmpByGender(gender).stream().skip((long) Index *OFFSET).limit(10).toList();
+            logger.info("Successfully get data");
+            return existingEmp;
         } catch (DataAccessException e) {
             logger.error("DataAccessException : " + e.getMessage());
             return null;
@@ -144,18 +135,13 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public List<Emp> getEmpByHireDateBetween(LocalDateTime empHireDate,LocalDateTime empOperatedDate) {
+    public List<Emp> getEmpByHireDateBetween(LocalDateTime empHireDate,LocalDateTime empOperatedDate,int Index) {
         try {
             String empHireDateString = empHireDate.toString();
             String empOperatedDateString = empOperatedDate.toString();
-            List<Emp> existingEmp = empRepository.findByEmpHireDateBetween(empHireDateString, empOperatedDateString);
-            if (existingEmp == null) {
-                logger.warn("Emp not found");
-                return null;
-            } else {
-                logger.info("Successfully get data");
-                return existingEmp;
-            }
+            List<Emp> existingEmp = empRepository.findByEmpHireDateBetween(empHireDateString, empOperatedDateString).stream().skip((long) Index *OFFSET).limit(10).toList();
+            logger.info("Successfully get data");
+            return existingEmp;
         } catch (DataAccessException e) {
             logger.error("DataAccessException : " + e.getMessage());
             return null;

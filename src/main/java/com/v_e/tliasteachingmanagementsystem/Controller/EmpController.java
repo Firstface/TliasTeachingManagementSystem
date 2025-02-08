@@ -60,8 +60,8 @@ public class EmpController {
     }
 
     @GetMapping("/name")
-    public ResponseEntity<List<Emp>> getEmpByNameContaining(String name) {
-        List<Emp> res = empService.getEmpByNameContaining(name);
+    public ResponseEntity<List<Emp>> getEmpByNameContaining(String name, int Index) {
+        List<Emp> res = empService.getEmpByNameContaining(name, Index);
         if (res == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -70,8 +70,8 @@ public class EmpController {
     }
 
     @GetMapping("/gender")
-    public ResponseEntity<List<Emp>> getEmpByGender(String gender) {
-        List<Emp> res = empService.getEmpByGender(gender);
+    public ResponseEntity<List<Emp>> getEmpByGender(String gender, int Index) {
+        List<Emp> res = empService.getEmpByGender(gender, Index);
         if (res == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -80,8 +80,8 @@ public class EmpController {
     }
 
     @GetMapping("/hireDate")
-    public ResponseEntity<List<Emp>> getEmpByHireDateBetween(LocalDateTime empHireDate, LocalDateTime empOperatedDate) {
-        List<Emp> res = empService.getEmpByHireDateBetween(empHireDate, empOperatedDate);
+    public ResponseEntity<List<Emp>> getEmpByHireDateBetween(LocalDateTime empHireDate, LocalDateTime empOperatedDate, int Index) {
+        List<Emp> res = empService.getEmpByHireDateBetween(empHireDate, empOperatedDate, Index);
         if (res == null) {
             return ResponseEntity.notFound().build();
         } else {

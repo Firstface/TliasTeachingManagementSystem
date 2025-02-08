@@ -11,7 +11,7 @@ public interface EmpService {
     Emp saveEmp(Emp emp);
     Emp updateEmp(int id, Emp emp);
     Emp deleteEmp(int id);
-    List<Emp> getEmpByNameContaining(String name);
-    List<Emp> getEmpByGender(String gender);
-    List<Emp> getEmpByHireDateBetween(LocalDateTime empHireDate, LocalDateTime empOperatedDate);
+    List<Emp> getEmpByNameContaining(String name,int Index);
+    List<Emp> getEmpByGender(String gender,int Index);
+    List<Emp> getEmpByHireDateBetween(LocalDateTime empHireDate, LocalDateTime empOperatedDate,int Index);
 }
