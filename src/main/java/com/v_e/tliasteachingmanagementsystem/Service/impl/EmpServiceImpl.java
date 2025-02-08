@@ -24,25 +24,7 @@ public class EmpServiceImpl implements EmpService {
         this.empRepository = empRepository;
     }
 
-    @Override
-    public List<Emp> getEmpPagination(int Size, int Offset) {
-        try {
-            List<Emp> res = empRepository.findEmpPagination(Size, Offset);
-            if (res.isEmpty()) {
-                logger.warn("There is no more data");
-                return null;
-            } else {
-                logger.info("Successfully get data");
-                return res;
-            }
-        } catch (DataAccessException e) {
-            logger.error("DataAccessException : " + e.getMessage());
-            return null;
-        } catch (Exception e) {
-            logger.error("Unexpected Exception : " + e.getMessage());
-            return null;
-        }
-    }
+
 
     @Override
     public Emp saveEmp(Emp emp) {
@@ -106,42 +88,27 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public List<Emp> getEmpByNameContaining(String name,int Index) {
+    public List<Emp> getEmpByFilter(String name, String gender, LocalDateTime empHireDate, LocalDateTime empOperatedDate, int Index) {
         try {
-            List<Emp> existingEmp = empRepository.findEmpByEmpNameContaining(name).stream().skip((long) Index *OFFSET).limit(10).toList();
-            logger.info("Successfully get data");
-            return existingEmp;
-        } catch (DataAccessException e) {
-        return null;
-        } catch (Exception e) {
-            logger.error("Unexpected Exception : " + e.getMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public List<Emp> getEmpByGender(String gender,int Index) {
-        try {
-            List<Emp> existingEmp = empRepository.findEmpByGender(gender).stream().skip((long) Index *OFFSET).limit(10).toList();
-            logger.info("Successfully get data");
-            return existingEmp;
-        } catch (DataAccessException e) {
-            logger.error("DataAccessException : " + e.getMessage());
-            return null;
-        } catch (Exception e) {
-            logger.error("Unexpected Exception : " + e.getMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public List<Emp> getEmpByHireDateBetween(LocalDateTime empHireDate,LocalDateTime empOperatedDate,int Index) {
-        try {
-            String empHireDateString = empHireDate.toString();
-            String empOperatedDateString = empOperatedDate.toString();
-            List<Emp> existingEmp = empRepository.findByEmpHireDateBetween(empHireDateString, empOperatedDateString).stream().skip((long) Index *OFFSET).limit(10).toList();
-            logger.info("Successfully get data");
-            return existingEmp;
+            List<Emp> existingEmp = empRepository.findAll().stream()
+                    .filter(emp ->
+                            (name == null || name.isEmpty() || emp.getEmpName().contains(name)) &&
+                                    (gender == null || gender.isEmpty() || emp.getGender().equals(gender)) &&
+                                    (empHireDate == null || emp.getEmpHireDate().isEqual(empHireDate) || emp.getEmpHireDate().isAfter(empHireDate)) &&
+                                    (empOperatedDate == null ||
+                                            (emp.getEmpOperatedDate().isAfter(empHireDate) && emp.getEmpOperatedDate().isBefore(empOperatedDate)) ||
+                                            emp.getEmpOperatedDate().isEqual(empOperatedDate))
+                    )
+                    .skip((long) Index * OFFSET)
+                    .limit(10)
+                    .toList();
+            if(existingEmp.isEmpty()){
+                logger.warn("Emp not found");
+                return null;
+            }else{
+                logger.info("Successfully get data");
+                return existingEmp;
+            }
         } catch (DataAccessException e) {
             logger.error("DataAccessException : " + e.getMessage());
             return null;

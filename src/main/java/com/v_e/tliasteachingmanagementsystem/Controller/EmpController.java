@@ -3,6 +3,7 @@ package com.v_e.tliasteachingmanagementsystem.Controller;
 import com.v_e.tliasteachingmanagementsystem.Entity.Emp;
 import com.v_e.tliasteachingmanagementsystem.Service.EmpService;
 import com.v_e.tliasteachingmanagementsystem.Service.impl.EmpServiceImpl;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +21,21 @@ public class EmpController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Emp>> getEmpPagination(int Size, int Offset) {
-        List<Emp> res = empService.getEmpPagination(Size, Offset);
+    public ResponseEntity<List<Emp>> getEmpByFilter(
+            @RequestParam(required = false) String name
+            , @RequestParam(required = false) String gender
+            , @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime empHireDate
+            , @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime empOperatedDate
+            , @RequestParam(defaultValue = "0",required = false) int Index)
+    {
+        List<Emp> res = empService.getEmpByFilter(name, gender, empHireDate, empOperatedDate, Index);
         if (res == null) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(res);
         }
     }
+
 
     @PostMapping
     public ResponseEntity<Emp> saveEmp(Emp emp) {
@@ -59,33 +67,4 @@ public class EmpController {
         }
     }
 
-    @GetMapping("/name")
-    public ResponseEntity<List<Emp>> getEmpByNameContaining(String name, int Index) {
-        List<Emp> res = empService.getEmpByNameContaining(name, Index);
-        if (res == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(res);
-        }
-    }
-
-    @GetMapping("/gender")
-    public ResponseEntity<List<Emp>> getEmpByGender(String gender, int Index) {
-        List<Emp> res = empService.getEmpByGender(gender, Index);
-        if (res == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(res);
-        }
-    }
-
-    @GetMapping("/hireDate")
-    public ResponseEntity<List<Emp>> getEmpByHireDateBetween(LocalDateTime empHireDate, LocalDateTime empOperatedDate, int Index) {
-        List<Emp> res = empService.getEmpByHireDateBetween(empHireDate, empOperatedDate, Index);
-        if (res == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(res);
-        }
-    }
 }

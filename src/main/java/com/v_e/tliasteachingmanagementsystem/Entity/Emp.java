@@ -1,9 +1,12 @@
 package com.v_e.tliasteachingmanagementsystem.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -26,11 +29,12 @@ public class Emp {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn( referencedColumnName = "Id", nullable = false)
+    @JsonIgnore
     private Dept empDept;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private String empHireDate;
+    private LocalDateTime empHireDate;
 
     @Column(nullable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    private String empOperatedDate;
+    private LocalDateTime empOperatedDate;
 }
