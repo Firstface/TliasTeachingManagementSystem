@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -31,6 +32,9 @@ public class Emp {
     @JoinColumn( referencedColumnName = "Id", nullable = false)
     @JsonIgnore
     private Dept empDept;
+
+    @OneToMany(mappedBy = "emp", cascade = CascadeType.ALL)
+    private List<Emp_Expr> empExpr;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime empHireDate;

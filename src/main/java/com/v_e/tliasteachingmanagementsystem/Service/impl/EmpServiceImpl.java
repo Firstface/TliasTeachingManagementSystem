@@ -2,6 +2,7 @@ package com.v_e.tliasteachingmanagementsystem.Service.impl;
 
 import com.v_e.tliasteachingmanagementsystem.Entity.Emp;
 import com.v_e.tliasteachingmanagementsystem.Repository.EmpRepository;
+import com.v_e.tliasteachingmanagementsystem.Service.EmpExprService;
 import com.v_e.tliasteachingmanagementsystem.Service.EmpService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -17,11 +18,13 @@ import java.util.List;
 public class EmpServiceImpl implements EmpService {
 
     private final EmpRepository empRepository;
+    private final EmpExprService empExprService;
     private final Logger logger = LoggerFactory.getLogger(EmpServiceImpl.class);
     private final static int OFFSET = 10;
 
-    public EmpServiceImpl(EmpRepository empRepository) {
+    public EmpServiceImpl(EmpRepository empRepository, EmpExprServiceImpl empExprService) {
         this.empRepository = empRepository;
+        this.empExprService = empExprService;
     }
 
 
@@ -29,13 +32,14 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public Emp saveEmp(Emp emp) {
         try {
-            logger.info("Successfully save data");
+            logger.info("UpdateEmp -- Successfully save data");
+            empExprService.saveEmpExpr(emp.getEmpExpr());
             return empRepository.save(emp);
         } catch (DataAccessException e) {
-            logger.error("DataAccessException : " + e.getMessage());
+            logger.error("UpdateEmp -- DataAccessException : " + e.getMessage());
             return null;
         } catch (Exception e) {
-            logger.error("Unexpected Exception : " + e.getMessage());
+            logger.error("UpdateEmp -- Unexpected Exception : " + e.getMessage());
             return null;
         }
     }
@@ -45,7 +49,7 @@ public class EmpServiceImpl implements EmpService {
         try {
             Emp existingEmp = empRepository.findEmpById(id);
             if (existingEmp == null) {
-                logger.warn("Emp not found");
+                logger.warn("UpdateEmp -- Emp not found");
                 return null;
             } else {
                 existingEmp.setEmpName(emp.getEmpName() == null ? existingEmp.getEmpName() : emp.getEmpName());
@@ -54,14 +58,14 @@ public class EmpServiceImpl implements EmpService {
                 existingEmp.setEmpHireDate(emp.getEmpHireDate() == null ? existingEmp.getEmpHireDate() : emp.getEmpHireDate());
                 existingEmp.setGender(emp.getGender() == null ? existingEmp.getGender() : emp.getGender());
                 existingEmp.setImage(emp.getImage() == null ? existingEmp.getImage() : emp.getImage());
-                logger.info("Successfully update data");
+                logger.info("UpdateEmp -- Successfully update data");
                 return empRepository.save(existingEmp);
             }
         } catch (DataAccessException e) {
-            logger.error("DataAccessException : " + e.getMessage());
+            logger.error("UpdateEmp -- DataAccessException : " + e.getMessage());
             return null;
         } catch (Exception e) {
-            logger.error("Unexpected Exception : " + e.getMessage());
+            logger.error("UpdateEmp -- Unexpected Exception : " + e.getMessage());
             return null;
         }
     }
@@ -71,18 +75,18 @@ public class EmpServiceImpl implements EmpService {
         try {
             Emp existingEmp = empRepository.findEmpById(id);
             if (existingEmp == null) {
-                logger.warn("Emp not found");
+                logger.warn("UpdateEmp -- Emp not found");
                 return null;
             } else {
                 empRepository.delete(existingEmp);
-                logger.info("Successfully delete data");
+                logger.info("UpdateEmp -- Successfully delete data");
                 return existingEmp;
             }
         } catch (DataAccessException e) {
-            logger.error("DataAccessException : " + e.getMessage());
+            logger.error("UpdateEmp -- DataAccessException : " + e.getMessage());
             return null;
         } catch (Exception e) {
-            logger.error("Unexpected Exception : " + e.getMessage());
+            logger.error("UpdateEmp -- Unexpected Exception : " + e.getMessage());
             return null;
         }
     }
@@ -103,17 +107,17 @@ public class EmpServiceImpl implements EmpService {
                     .limit(10)
                     .toList();
             if(existingEmp.isEmpty()){
-                logger.warn("Emp not found");
+                logger.warn("UpdateEmp -- Emp not found");
                 return null;
             }else{
-                logger.info("Successfully get data");
+                logger.info("UpdateEmp -- Successfully get data");
                 return existingEmp;
             }
         } catch (DataAccessException e) {
-            logger.error("DataAccessException : " + e.getMessage());
+            logger.error("UpdateEmp -- DataAccessException : " + e.getMessage());
             return null;
         } catch (Exception e) {
-            logger.error("Unexpected Exception : " + e.getMessage());
+            logger.error("UpdateEmp -- Unexpected Exception : " + e.getMessage());
             return null;
         }
     }
