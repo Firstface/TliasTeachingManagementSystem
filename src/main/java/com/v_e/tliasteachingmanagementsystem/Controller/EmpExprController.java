@@ -1,5 +1,6 @@
 package com.v_e.tliasteachingmanagementsystem.Controller;
 
+import com.v_e.tliasteachingmanagementsystem.Entity.DTO.Expr_Emp;
 import com.v_e.tliasteachingmanagementsystem.Entity.Emp_Expr;
 import com.v_e.tliasteachingmanagementsystem.Service.EmpExprService;
 import com.v_e.tliasteachingmanagementsystem.Service.impl.EmpExprServiceImpl;
@@ -39,7 +40,7 @@ public class EmpExprController {
     }
 
     @PostMapping
-    public ResponseEntity<List<Emp_Expr>> saveEmpExpr(@RequestBody List<Emp_Expr> empExpr){
+    public ResponseEntity<List<Emp_Expr>> saveEmpExpr(@RequestBody List<Expr_Emp> empExpr){
         List<Emp_Expr> savedEmpExpr = empExprService.saveEmpExpr(empExpr);
         if(savedEmpExpr.isEmpty()){
             return ResponseEntity.badRequest().build();

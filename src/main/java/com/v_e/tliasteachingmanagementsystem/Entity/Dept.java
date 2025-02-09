@@ -1,5 +1,6 @@
 package com.v_e.tliasteachingmanagementsystem.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class Dept {
     private int deptNum;
 
     @OneToMany(mappedBy = "empDept", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("empDept")
     private List<Emp> emps;
 
     @Column(nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

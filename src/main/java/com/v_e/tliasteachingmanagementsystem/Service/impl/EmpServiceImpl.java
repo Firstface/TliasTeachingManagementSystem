@@ -1,6 +1,8 @@
 package com.v_e.tliasteachingmanagementsystem.Service.impl;
 
+import com.v_e.tliasteachingmanagementsystem.Entity.DTO.Expr_Emp;
 import com.v_e.tliasteachingmanagementsystem.Entity.Emp;
+import com.v_e.tliasteachingmanagementsystem.Entity.Emp_Expr;
 import com.v_e.tliasteachingmanagementsystem.Repository.EmpRepository;
 import com.v_e.tliasteachingmanagementsystem.Service.EmpExprService;
 import com.v_e.tliasteachingmanagementsystem.Service.EmpService;
@@ -11,6 +13,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,7 +36,14 @@ public class EmpServiceImpl implements EmpService {
     public Emp saveEmp(Emp emp) {
         try {
             logger.info("UpdateEmp -- Successfully save data");
-            empExprService.saveEmpExpr(emp.getEmpExpr());
+            List<Expr_Emp> expr_emps = new ArrayList<>();
+            for(Emp_Expr e : emp.getEmpExpr()){
+                Expr_Emp expr_emp = new Expr_Emp();
+                expr_emp.setEmpId(emp.getId());
+                expr_emp.setExprName(e.getExprName());
+                expr_emps.add(expr_emp);
+            }
+            empExprService.saveEmpExpr(expr_emps);
             return empRepository.save(emp);
         } catch (DataAccessException e) {
             logger.error("UpdateEmp -- DataAccessException : " + e.getMessage());

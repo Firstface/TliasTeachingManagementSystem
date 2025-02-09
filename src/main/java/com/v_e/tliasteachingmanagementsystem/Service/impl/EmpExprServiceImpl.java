@@ -1,7 +1,9 @@
 package com.v_e.tliasteachingmanagementsystem.Service.impl;
 
+import com.v_e.tliasteachingmanagementsystem.Entity.DTO.Expr_Emp;
 import com.v_e.tliasteachingmanagementsystem.Entity.Emp_Expr;
 import com.v_e.tliasteachingmanagementsystem.Repository.EmpExprRepository;
+import com.v_e.tliasteachingmanagementsystem.Repository.EmpRepository;
 import com.v_e.tliasteachingmanagementsystem.Service.EmpExprService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -17,15 +19,25 @@ import java.util.List;
 public class EmpExprServiceImpl implements EmpExprService {
 
     private final EmpExprRepository empExprRepository;
+    private final EmpRepository empRepository;
     private final Logger logger = LoggerFactory.getLogger(EmpExprServiceImpl.class);
 
-    public EmpExprServiceImpl(EmpExprRepository empExprRepository) {
+    public EmpExprServiceImpl(EmpExprRepository empExprRepository, EmpRepository empRepository) {
         this.empExprRepository = empExprRepository;
+        this.empRepository = empRepository;
     }
 
     @Override
-    public List<Emp_Expr> saveEmpExpr(List<Emp_Expr> empExpr) {
+    public List<Emp_Expr> saveEmpExpr(List<Expr_Emp> response) {
+        List<Emp_Expr> empExpr = new ArrayList<>();
         try {
+            for (Expr_Emp e : response){
+                Emp_Expr newEmpExpr = new Emp_Expr();
+                newEmpExpr.setExprName(e.getExprName());
+                logger.warn(String.valueOf(e.getEmpId()));
+                newEmpExpr.setEmp(empRepository.findById(e.getEmpId()).orElse(null));
+                empExpr.add(newEmpExpr);
+            }
             if(empExpr.isEmpty()){
                 logger.warn("EmpExpr is empty");
                 return empExpr;

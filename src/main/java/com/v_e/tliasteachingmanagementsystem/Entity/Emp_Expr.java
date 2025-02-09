@@ -1,6 +1,6 @@
 package com.v_e.tliasteachingmanagementsystem.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,6 +26,6 @@ public class Emp_Expr {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "Id", nullable = false)
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Emp emp;
 }
